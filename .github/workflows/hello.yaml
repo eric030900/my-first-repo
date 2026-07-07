@@ -33,3 +33,20 @@ jobs:
             echo "❌ 檢查失敗，README 裡沒有提到 Git！"
             exit 1
           fi
+
+      - name: 每日一言
+        run: |
+          quotes=(
+            "成功不是終點，失敗也不是終結，唯有勇氣才能持續前進。"
+            "今天的努力，是明天的底氣。"
+            "程式碼會壞，但別放棄自己。"
+            "先完成，再完美。"
+            "每一次 commit，都是一次成長的紀錄。"
+          )
+          random_quote=${quotes[$RANDOM % ${#quotes[@]}]}
+          echo "$(date '+%Y-%m-%d %H:%M') - $random_quote" >> QUOTES.txt
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add QUOTES.txt
+          git commit -m "🎲 新增每日一言" || echo "沒有變更，跳過提交"
+          git push
