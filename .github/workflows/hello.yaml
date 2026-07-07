@@ -24,3 +24,12 @@ jobs:
           git add LAST_UPDATED.txt
           git commit -m "🤖 自動更新時間戳記" || echo "沒有變更，跳過提交"
           git push
+
+      - name: 檢查 README 是否包含必要說明
+        run: |
+          if grep -q "Git" README.md; then
+            echo "✅ 檢查通過，README 裡有提到 Git"
+          else
+            echo "❌ 檢查失敗，README 裡沒有提到 Git！"
+            exit 1
+          fi
