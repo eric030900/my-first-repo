@@ -2,13 +2,25 @@ name: 打招呼機器人
 
 on:
   push:
-  schedule:
-    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
   say-hello:
     runs-on: ubuntu-latest
     steps:
+      - name: 取得程式碼
+        uses: actions/checkout@v4
+
       - name: 打招呼
-        run: echo "哈囉 eric030900！你剛剛 push 了新東西，機器人自動跟你打招呼 👋"
+        run: echo "哈囉 eric030900！你剛剛 push 了新東西 👋"
+
+      - name: 產生最後更新時間
+        run: echo "最後更新時間：$(date '+%Y-%m-%d %H:%M:%S')" > LAST_UPDATED.txt
+
+      - name: 自動提交這個檔案
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add LAST_UPDATED.txt
+          git commit -m "🤖 自動更新時間戳記" || echo "沒有變更，跳過提交"
+          git push
